@@ -3,15 +3,10 @@ package com.SocietyProject.Controller;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.SocietyProject.Dao.UserRepository;
-import com.SocietyProject.Model.User;
+import com.SocietyProject.Dao.*;
+import com.SocietyProject.Model.*;
 
 
 @RestController
@@ -20,6 +15,12 @@ import com.SocietyProject.Model.User;
 public class UserController {
 	@Autowired
 	private UserRepository userRepo;
+	
+	@Autowired
+	private MaintenanceRepository mRepo;
+	
+	@Autowired
+	private SocietyBillRepository sbRepo;
 	
 	@GetMapping("/user")
 	public List<User> getAllUsers(){
@@ -35,5 +36,18 @@ public class UserController {
 			return u1;
 		}
 		return null;
+	}
+	@GetMapping("/maintenance/{id}/{year}")
+	public List<MaintenanceRecord> getUserMaintenance(@PathVariable("id") int id,@PathVariable("year") int year){
+		List<MaintenanceRecord> mylist = mRepo.findByUserID(id,year);
+		if(mylist.size()==0) {
+			return new ArrayList<MaintenanceRecord>();
+		}
+		System.out.println(mylist.get(0).getMonth());
+		return mylist;
+	}
+	@GetMapping("/bill")
+	public List<SocietyBillRecord> getSocietyBillRecords(){
+		return sbRepo.findAll();
 	}
 }
