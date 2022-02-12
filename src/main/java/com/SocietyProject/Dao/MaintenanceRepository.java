@@ -15,4 +15,7 @@ public interface MaintenanceRepository extends JpaRepository<MaintenanceRecord, 
 	
 	@Query(value = "SELECT * FROM maintenance_record WHERE month = ?1 and year = ?2", nativeQuery = true)
 	List<MaintenanceRecord> findByMonth(String month,int year);
+	
+	@Query(value = "SELECT * FROM maintenance_record WHERE status = 'Pending'", nativeQuery = true)
+	List<MaintenanceRecord> findDefaulters();
 }

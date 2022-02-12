@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import com.SocietyProject.Dao.*;
@@ -29,6 +30,17 @@ public class AdminController {
 	@GetMapping("/admin")
 	public List<Admin> getAllAdmins(){
 		return adminRepo.findAll();
+	}
+	@PostMapping("/admin")
+	public Admin loginUser(@RequestBody Admin u){
+		Admin u1 = adminRepo.findByUsername(u.getUsername());
+		if(u1==null) {
+			return null;
+		}
+		if(u1.getPassword().trim().equalsIgnoreCase(u.getPassword().trim())) {
+			return u1;
+		}
+		return null;
 	}
 	
 	@GetMapping("/members")
@@ -79,4 +91,19 @@ public class AdminController {
 	public List<SocietyBillRecord> getBillRecords(){
 		return bRepo.findAll();
 	}
+	@GetMapping("/defaulters")
+	public List<MaintenanceRecord> getDefaultersRecords(){
+		return mRepo.findDefaulters();
+	}
+	/*
+	 @Scheduled(fixedDelay=(1000*60*60*24*30))
+	public void schedulePenaltyForDefaulters() {
+		List<MaintenanceRecord> defList = mRepo.findDefaulters();
+		for(MaintenanceRecord m : defList) {
+			m.setTotalAmount(m.getTotalAmount()*1.02);
+			mRepo.save(m);
+		}
+	}
+	 */
+	
 }
