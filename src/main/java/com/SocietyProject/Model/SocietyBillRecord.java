@@ -1,6 +1,8 @@
 package com.SocietyProject.Model;
 
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -39,6 +42,7 @@ public class SocietyBillRecord {
 	private String month;
 	@Column(name="year")
 	private int year;
+	
 	public SocietyBillRecord() {
 		super();
 		// TODO Auto-generated constructor stub

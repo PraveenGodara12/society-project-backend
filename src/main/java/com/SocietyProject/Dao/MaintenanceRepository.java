@@ -12,4 +12,7 @@ import com.SocietyProject.Model.*;
 public interface MaintenanceRepository extends JpaRepository<MaintenanceRecord, Integer>{
 	@Query(value = "SELECT * FROM maintenance_record WHERE userID = ?1 and year = ?2", nativeQuery = true)
 	List<MaintenanceRecord> findByUserID(int userID,int year);
+	
+	@Query(value = "SELECT * FROM maintenance_record WHERE month = ?1 and year = ?2", nativeQuery = true)
+	List<MaintenanceRecord> findByMonth(String month,int year);
 }

@@ -1,11 +1,13 @@
 package com.SocietyProject.Controller;
 
-import java.util.List;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.SocietyProject.Dao.*;
+import com.SocietyProject.Exception.ResourceNotFoundException;
 import com.SocietyProject.Model.*;
 
 @RestController
@@ -18,6 +20,12 @@ public class AdminController {
 	@Autowired
 	private UserRepository userRepo;
 	
+	@Autowired
+	private MaintenanceRepository mRepo;
+	
+	@Autowired
+	private SocietyBillRepository bRepo;
+	
 	@GetMapping("/admin")
 	public List<Admin> getAllAdmins(){
 		return adminRepo.findAll();
@@ -27,8 +35,48 @@ public class AdminController {
 	public List<User> getMembers(){
 		return userRepo.findAll();
 	}
-	@PostMapping("/members")
-	public User addMember(@RequestBody User u){
+	@PostMapping("/members/{id}")
+	public User addMember(@PathVariable("id") int id,@RequestBody User u){
+		if(id==0)
 		return userRepo.save(u);
+		else {
+			u.setUserID(id);
+			return userRepo.save(u);
+		}
+	}
+	@GetMapping("/members/{id}")
+	public User getMemberById(@PathVariable("id") int id){
+		return userRepo.findById(id).orElseThrow(()->new ResourceNotFoundException(null));
+	}
+	@DeleteMapping("/members/{id}")
+	public List<User> deleteMember(@PathVariable("id") int id){
+		User u = userRepo.findById(id).orElseThrow(()->new ResourceNotFoundException(null));
+		userRepo.delete(u);
+		return userRepo.findAll();
+	}
+	@GetMapping("/societymaintenance/{month}/{year}")
+	public List<MaintenanceRecord> getMaintenanceRecords(@PathVariable("month") String month,@PathVariable("year") int year){
+		return mRepo.findByMonth(month, year);
+	}
+	@PostMapping("/societymaintenance/{id}/{userID}/{billID}")
+	public MaintenanceRecord addMaintenanceRecord(@PathVariable("id") int id, @PathVariable("userID") int userid, @PathVariable("billID") int billid,@RequestBody MaintenanceRecord u){
+		User myuser = userRepo.findById(userid).orElseThrow(()->new ResourceNotFoundException(null));
+		SocietyBillRecord sbr = bRepo.findById(billid).orElseThrow(()-> new ResourceNotFoundException(null));;
+		u.setUser(myuser);
+		u.setBill(sbr);
+		if(id==0)
+		return mRepo.save(u);
+		else {
+			u.setRecordID(id);
+			return mRepo.save(u);
+		}
+	}
+	@GetMapping("/societymaintenance/{id}")
+	public MaintenanceRecord getMaintenanceRecordById(@PathVariable("id") int id){
+		return mRepo.findById(id).orElseThrow(()->new ResourceNotFoundException(null));
+	}
+	@GetMapping("/billRecord")
+	public List<SocietyBillRecord> getBillRecords(){
+		return bRepo.findAll();
 	}
 }
