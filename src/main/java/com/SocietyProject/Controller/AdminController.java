@@ -83,6 +83,7 @@ public class AdminController {
 			return mRepo.save(u);
 		}
 	}
+	
 	@GetMapping("/societymaintenance/{id}")
 	public MaintenanceRecord getMaintenanceRecordById(@PathVariable("id") int id){
 		return mRepo.findById(id).orElseThrow(()->new ResourceNotFoundException(null));
@@ -90,6 +91,10 @@ public class AdminController {
 	@GetMapping("/billRecord")
 	public List<SocietyBillRecord> getBillRecords(){
 		return bRepo.findAll();
+	}
+	@PostMapping("/billRecord")
+	public SocietyBillRecord addSocietyBillRecord(@RequestBody SocietyBillRecord u){
+		return bRepo.save(u);
 	}
 	@GetMapping("/defaulters")
 	public List<MaintenanceRecord> getDefaultersRecords(){
