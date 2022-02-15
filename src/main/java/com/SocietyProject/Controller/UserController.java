@@ -32,18 +32,17 @@ public class UserController {
 		if(u1==null) {
 			return null;
 		}
-		if(u1.getPassword().trim().equalsIgnoreCase(u.getPassword().trim())) {
+		if(u1.getPassword().trim().equals(u.getPassword().trim())) {
 			return u1;
 		}
 		return null;
 	}
-	@GetMapping("/maintenance/{id}/{year}")
-	public List<MaintenanceRecord> getUserMaintenance(@PathVariable("id") int id,@PathVariable("year") int year){
-		List<MaintenanceRecord> mylist = mRepo.findByUserID(id,year);
+	@GetMapping("/maintenance/{id}")
+	public List<MaintenanceRecord> getUserMaintenance(@PathVariable("id") int id){
+		List<MaintenanceRecord> mylist = mRepo.findByUserID(id);
 		if(mylist.size()==0) {
 			return new ArrayList<MaintenanceRecord>();
 		}
-		System.out.println(mylist.get(0).getMonth());
 		return mylist;
 	}
 	@GetMapping("/bill")

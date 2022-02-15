@@ -3,7 +3,6 @@ package com.SocietyProject.Controller;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +36,7 @@ public class AdminController {
 		if(u1==null) {
 			return null;
 		}
-		if(u1.getPassword().trim().equalsIgnoreCase(u.getPassword().trim())) {
+		if(u1.getPassword().trim().equals(u.getPassword().trim())) {
 			return u1;
 		}
 		return null;
@@ -66,9 +65,9 @@ public class AdminController {
 		userRepo.delete(u);
 		return userRepo.findAll();
 	}
-	@GetMapping("/societymaintenance/{month}/{year}")
-	public List<MaintenanceRecord> getMaintenanceRecords(@PathVariable("month") String month,@PathVariable("year") int year){
-		return mRepo.findByMonth(month, year);
+	@GetMapping("/societymaintenance")
+	public List<MaintenanceRecord> getMaintenanceRecords(){
+		return mRepo.findAll();
 	}
 	@PostMapping("/societymaintenance/{id}/{userID}/{billID}")
 	public MaintenanceRecord addMaintenanceRecord(@PathVariable("id") int id, @PathVariable("userID") int userid, @PathVariable("billID") int billid,@RequestBody MaintenanceRecord u){
